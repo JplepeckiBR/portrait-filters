@@ -68,7 +68,7 @@ def riso(rgb, alpha=None, dark_ink=(30, 80, 70), light_ink=(255, 120, 80),
 
 
 def copper_halftone(rgb, alpha=None, cell=9, ink=(196, 122, 58), board=(18, 24, 20),
-                    gamma=1.0, supersample=3, area_correct=False):
+                    gamma=1.0, supersample=3, area_correct=False, tone="equalize"):
     """Copper dots on a dark circuit board.
 
     The image is cut into `cell` x `cell` squares; each square becomes one dot sized
@@ -77,8 +77,11 @@ def copper_halftone(rgb, alpha=None, cell=9, ink=(196, 122, 58), board=(18, 24, 
     flat on a face, so by default the radius is roughly linear in brightness, which
     shrinks mid-tone dots and reads as more contrast. Drawn at `supersample`x and
     scaled down for smooth circles.
+
+    tone="equalize" (default) suits coarse dots; at fine dot sizes it turns skin
+    blotchy, so use tone="stretch" there to keep the photo's own shading.
     """
-    gray, subject = prepare(rgb, alpha, gamma, tone="equalize")
+    gray, subject = prepare(rgb, alpha, gamma, tone=tone)
     h, w = gray.shape
     s = supersample
     img = Image.new("RGB", (w * s, h * s), board)
